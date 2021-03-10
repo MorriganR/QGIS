@@ -40,7 +40,7 @@ endif
 
 QT_PLUGINS_DIR = lib/$(DEB_BUILD_MULTIARCH)/qt5/plugins
 
-ifneq ($(DISTRIBUTION),$(findstring $(DISTRIBUTION),"buster bullseye bionic focal groovy"))
+ifneq ($(DISTRIBUTION),$(findstring $(DISTRIBUTION),"buster bullseye bionic focal groovy hirsute"))
 	DISTRIBUTION := sid
 endif
 
@@ -256,6 +256,7 @@ test-stamp:
 ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 	# Code to run the package test suite
 	rm -f $(QGIS_BUILDDIR)/.error
+	cp -u $(QGIS_BUILDDIR)/CTestConfig.cmake .
 	mkdir -p debian/tmp/locale/
 	localedef -f UTF-8 -i en_US ./debian/tmp/locale/en_US.UTF-8/
 	LOCPATH=$(CURDIR)/debian/tmp/locale/ \
