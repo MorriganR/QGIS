@@ -191,3 +191,26 @@ python3 /root/QGIS/.ci/ctest2ci.py xvfb-run ctest -V $CTEST_OPTIONS -E "${EXCLUD
 
 echo "Print disk space"
 df -h
+
+###########
+# Run additional postgres tests
+###########
+if [ ${RUN_POSTGRES:-"NO"} == "YES" ]; then
+
+  apt install -y iproute2 iputils-ping
+  ping -c 3 postgres
+
+  pushd /root/QGIS > /dev/null
+  echo "Restoring postgres test data ..."
+  /root/QGIS/tests/testdata/provider/testdata_pg.sh
+  echo "Postgres test data restored ..."
+  popd > /dev/null # /root/QGIS
+
+  echo "set delay 10ms"
+  tc qdisc add dev eth0 root netem delay 10ms
+  ping -c 3 postgres
+
+  echo "Run tests"
+  python3 /root/QGIS/.ci/ctest2ci.py xvfb-run ctest -V $CTEST_OPTIONS -E "${EXCLUDE_TESTS}" -S /root/QGIS/.ci/config_test.ctest --output-on-failure
+
+fi
