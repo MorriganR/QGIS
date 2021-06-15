@@ -325,7 +325,7 @@ jobs:
 
       - name: Print disk space
         run: |
-          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/share/dotnet/sdk
           echo "DF -H"
           sudo df -h
 
