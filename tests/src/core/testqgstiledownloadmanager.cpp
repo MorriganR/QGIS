@@ -29,7 +29,7 @@
 
 const QString url_1 = "https://www.qwant.com/maps/tiles/ozbasemap/0/0/0.pbf";
 const QString url_2 = "https://www.qwant.com/maps/tiles/ozbasemap/1/0/0.pbf";
-const QString url_bad = "http://www.example.com/download-manager-fail";
+const QString url_bad = "https://www.qwant.com/maps/tiles/ozbasemap/1/0/02.pbf";
 
 
 class TestQgsTileDownloadManager : public QObject
