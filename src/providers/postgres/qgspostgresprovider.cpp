@@ -677,7 +677,7 @@ QString QgsPostgresUtils::whereClause( const QgsFeatureIds &featureIds, const Qg
     if ( whereInList.isEmpty() )
       return whereOrString;
 
-    return QStringLiteral( "(%1) OR (%2)" ).arg( whereInString, whereOrString );
+    return QStringLiteral( "(%1) OR (%2)" ).arg( QStringLiteral( "1 = 1" ), whereOrString );
 
   };
 
