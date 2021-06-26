@@ -449,6 +449,12 @@ CREATE FOREIGN TABLE IF NOT EXISTS points_csv (
         self.assertTrue(vl.isValid())
         self.assertEqual(vl.featureCount(), 10)
 
+        uri = QgsDataSourceUri(self.uri)
+        uri.setUseEstimatedMetadata(False)
+        conn = md.createConnection(uri.uri(), {'estimatedMetadata': False})
+        table = conn.table('qgis_test', '(SELECT * FROM geometry_table_with_multiple_types)')
+        self.assertEqual(len(table.geometryColumnTypes()), 2)
+
 
 if __name__ == '__main__':
     unittest.main()
