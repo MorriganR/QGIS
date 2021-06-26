@@ -449,6 +449,14 @@ CREATE FOREIGN TABLE IF NOT EXISTS points_csv (
         self.assertTrue(vl.isValid())
         self.assertEqual(vl.featureCount(), 10)
 
+        uri = QgsDataSourceUri(self.uri)
+        uri.setUseEstimatedMetadata(True)
+        uri.setTable('(SELECT * FROM qgis_test.geometry_table_with_multiple_types)')
+        uri.setGeometryColumn('geom')
+        # uri.setWkbType(QgsWkbTypes.Point)
+        vl = QgsVectorLayer(uri.uri(), 'points', 'postgres')
+        self.assertTrue(vl.isValid())
+
 
 if __name__ == '__main__':
     unittest.main()
