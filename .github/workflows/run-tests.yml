@@ -236,7 +236,7 @@ jobs:
 #          body: ${{ steps.process-vars.outputs.COMMENT_BODY }}
 
   run-tests:
-    name: Run tests
+    name: Run tests ${{matrix.target}}
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -248,8 +248,131 @@ jobs:
     strategy:
       matrix:
         # tests run on 20.04 (Qt 5.12), compile test on 20.10 (Qt 5.14)
-        ubuntu-base: [20.04]
-        test-batch: [ALL_BUT_PROVIDERS, POSTGRES, ORACLE, HANA]
+        include:
+          - target: '(20.04, ALL_BUT_PROVIDERS)'
+            ubuntu-base: 20.04
+            test-batch: ALL_BUT_PROVIDERS
+          - target: '(20.04, HANA)'
+            ubuntu-base: 20.04
+            test-batch: HANA
+          - target: '(20.04, ORACLE)'
+            ubuntu-base: 20.04
+            test-batch: ORACLE
+          #- target: '(20.04, PG 9.3)'
+          #  ubuntu-base: 20.04
+          #  test-batch: POSTGRES
+          #  postgis-ver: 'kartoza/postgis:9.3'
+          #- target: '(20.04, PG 9.3-2.1)'
+          #  ubuntu-base: 20.04
+          #  test-batch: POSTGRES
+          #  postgis-ver: 'kartoza/postgis:9.3-2.1'
+          #- target: '(20.04, PG kartoza 9.4-2.1)'
+          #  ubuntu-base: 20.04
+          #  test-batch: POSTGRES
+          #  postgis-ver: 'kartoza/postgis:9.4-2.1'
+          #  exclude-pgver-test: 'PyQgsPostgresProvider|PyQgsPostgresRasterProvider|PyQgsRelationEditWidget|PyQgsRelationPostgres|PyQgsProjectStoragePostgres|PyQgsAuthManagerPKIPostgresTest|PyQgsAuthManagerPasswordPostgresTest|PyQgsProviderConnectionPostgres'
+          - target: '(20.04, PG kartoza 9.5-2.2 not all tests)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:9.5-2.2'
+            exclude-pgver-test: 'PyQgsAuthManagerPKIPostgresTest|PyQgsAuthManagerPasswordPostgresTest|PyQgsProviderConnectionPostgres'
+          #- target: '(20.04, PG kartoza 9.6-2.4)'
+          #  ubuntu-base: 20.04
+          #  test-batch: POSTGRES
+          #  postgis-ver: 'kartoza/postgis:9.6-2.4'
+          - target: '(20.04, PG postgis 9.6-2.5 not all tests)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'postgis/postgis:9.6-2.5'
+            exclude-pgver-test: 'PyQgsAuthManagerPKIPostgresTest|PyQgsAuthManagerPasswordPostgresTest|PyQgsProviderConnectionPostgres'
+          - target: '(20.04, PG kartoza 11.0-2.5 not all tests)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:11.0-2.5'
+            exclude-pgver-test: 'PyQgsProviderConnectionPostgres'
+          - target: '(20.04, PG kartoza 11.5-2.5 not all tests)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:11.5-2.5'
+            exclude-pgver-test: 'PyQgsProviderConnectionPostgres'
+          - target: '(20.04, PG kartoza 11.5-2.8)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:11.5-2.8'
+          - target: '(20.04, PG kartoza 12.0 not all tests)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:12.0'
+            exclude-pgver-test: 'PyQgsProviderConnectionPostgres'
+          - target: '(20.04, PG kartoza 12.1)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:12.1'
+          - target: '(20.04, PG kartoza 12.4)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:12.4'
+          - target: '(20.04, PG kartoza 13.0)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:13.0'
+          #- target: '(20.04, PG kartoza debian-buster-slim)'
+          #  ubuntu-base: 20.04
+          #  test-batch: POSTGRES
+          #  postgis-ver: 'kartoza/postgis:debian-buster-slim'
+          - target: '(20.04, PG kartoza 13)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:13'
+          - target: '(20.04, PG kartoza 13-3)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:13-3'
+          - target: '(20.04, PG kartoza 13-3.1)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:13-3.1'
+          - target: '(20.04, PG postgis 13-3.1 not all tests)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'postgis/postgis:13-3.1'
+            exclude-pgver-test: 'PyQgsAuthManagerPKIPostgresTest|PyQgsAuthManagerPasswordPostgresTest|PyQgsProviderConnectionPostgres'
+          - target: '(20.04, PG kartoza pr-307-13-3.1)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:pr-307-13-3.1'
+          - target: '(20.04, PG kartoza pr-309-13-3.1)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:pr-309-13-3.1'
+          - target: '(20.04, PG kartoza pr-313-13-3.1)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:pr-313-13-3.1'
+          - target: '(20.04, PG kartoza pr-316-13-3.1)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:pr-316-13-3.1'
+          - target: '(20.04, PG kartoza pr-318-13-3.1)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:pr-318-13-3.1'
+          - target: '(20.04, PG kartoza pr-320-13-3.1)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:pr-320-13-3.1'
+          - target: '(20.04, PG kartoza latest)'
+            ubuntu-base: 20.04
+            test-batch: POSTGRES
+            postgis-ver: 'kartoza/postgis:latest'
+          #- target: '(20.04, PG kartoza base)'
+          #  ubuntu-base: 20.04
+          #  test-batch: POSTGRES
+          #  postgis-ver: 'kartoza/postgis:base'
+          #- target: '(20.04, PG kartoza base-debian-bullseye-slim)'
+          #  ubuntu-base: 20.04
+          #  test-batch: POSTGRES
+          #  postgis-ver: 'kartoza/postgis:base-debian-bullseye-slim'
       fail-fast: false
       
     services:
@@ -332,6 +455,8 @@ jobs:
         id: tests
         env:
           TEST_BATCH: ${{matrix.test-batch}}
+          POSTGIS_VER: ${{matrix.postgis-ver}}
+          EXCLUDE_PGVER_TEST: ${{matrix.exclude-pgver-test}}
           QGIS_HTTPBIN_HOST: "localhost:8082"
         run: |
           DOCKERFILE=$( ( [[ ${TEST_BATCH} == "ORACLE"   ]] && echo "docker-compose-testing-oracle.yml" ) \
@@ -340,4 +465,4 @@ jobs:
           [[ ${TEST_BATCH} == "ORACLE" ]] && sudo rm -rf /usr/share/dotnet/sdk
           echo "TEST_BATCH=$TEST_BATCH"
           echo "DOCKERFILE=$DOCKERFILE"
-          docker-compose -f .docker/$DOCKERFILE run qgis-deps /root/QGIS/.docker/docker-qgis-test.sh $TEST_BATCH
+          docker-compose -f .docker/$DOCKERFILE run -e EXCLUDE_PGVER_TEST=$EXCLUDE_PGVER_TEST qgis-deps /root/QGIS/.docker/docker-qgis-test.sh $TEST_BATCH
