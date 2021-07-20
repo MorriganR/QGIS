@@ -268,7 +268,8 @@ jobs:
             test-batch: POSTGRES
             postgis-ver: 'postgis/postgis:9.6-2.5'
             exclude-pgver-test: 'PyQgsAuthManagerPKIPostgresTest|PyQgsAuthManagerPasswordPostgresTest|PyQgsProviderConnectionPostgres'
-          - target: '(20.04, PG kartoza 11.5-2.8)'
+          # Base PG Version '(20.04, PG kartoza 11.5-2.8)'
+          - target: '(20.04, POSTGRES)'
             ubuntu-base: 20.04
             test-batch: POSTGRES
             postgis-ver: 'kartoza/postgis:11.5-2.8'
